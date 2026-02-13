@@ -14,6 +14,10 @@
 		value = $bindable(),
 		type,
 		files = $bindable(),
+		autocomplete = "off",
+		autocorrect = "off",
+		autocapitalize = "off",
+		spellcheck = false,
 		class: className,
 		"data-slot": dataSlot = "input",
 		...restProps
@@ -31,6 +35,10 @@
 			className
 		)}
 		type="file"
+		{autocomplete}
+		{autocorrect}
+		{autocapitalize}
+		{spellcheck}
 		bind:files
 		bind:value
 		{...restProps}
@@ -46,6 +54,10 @@
 			className
 		)}
 		{type}
+		{autocomplete}
+		{autocorrect}
+		{autocapitalize}
+		{spellcheck}
 		bind:value
 		{...restProps}
 	/>

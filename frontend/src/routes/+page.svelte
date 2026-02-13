@@ -15,6 +15,13 @@
   let loadingBanks = true;
   let banksError = '';
 
+  function toLocalIsoDate(value = new Date()) {
+    const year = value.getFullYear();
+    const month = String(value.getMonth() + 1).padStart(2, '0');
+    const day = String(value.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
   const now = new Date();
   let form = {
     employerCr: '',
@@ -25,7 +32,7 @@
     salaryYear: now.getFullYear(),
     salaryMonth: now.getMonth() + 1,
     paymentType: 'Salary',
-    processingDate: now.toISOString().slice(0, 10),
+    processingDate: toLocalIsoDate(now),
     seq: 1,
     sheetName: 'Sheet1'
   };
@@ -137,7 +144,7 @@
   }
 
   function seedDevData() {
-    const todayIso = new Date().toISOString().slice(0, 10);
+    const todayIso = toLocalIsoDate(new Date());
     const targetBank = banks.find((bank) => bank.short_name === 'BMCT') || banks[0];
     const serial = ++seedEmployeeSerial;
     const serial4 = String(serial).padStart(4, '0');
@@ -332,6 +339,14 @@
   }
 
   onMount(() => {
+    const localNow = new Date();
+    form = {
+      ...form,
+      salaryYear: localNow.getFullYear(),
+      salaryMonth: localNow.getMonth() + 1,
+      processingDate: toLocalIsoDate(localNow)
+    };
+
     loadBanks();
 
     if (typeof window !== 'undefined') {
