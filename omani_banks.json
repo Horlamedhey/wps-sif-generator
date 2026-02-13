@@ -1,0 +1,142 @@
+[
+  {
+    "short_name": "OAB",
+    "bic": "OMABOMRU",
+    "bank_name": "Oman Arab Bank"
+  },
+  {
+    "short_name": "BOB",
+    "bic": "BARBOMMX",
+    "bank_name": "Bank Of Baroda"
+  },
+  {
+    "short_name": "BMI",
+    "bic": "MELIOMRX",
+    "bank_name": "Bank Melli Iran"
+  },
+  {
+    "short_name": "BSI",
+    "bic": "BSIROMRX",
+    "bank_name": "Bank Saderat Iran"
+  },
+  {
+    "short_name": "HSBC",
+    "bic": "BBMEOMRX",
+    "bank_name": "HSBC Middle east"
+  },
+  {
+    "short_name": "SCB",
+    "bic": "SCBLOMRX",
+    "bank_name": "Standard Chartered Bank"
+  },
+  {
+    "short_name": "FAB",
+    "bic": "NBADOMRX",
+    "bank_name": "First Abu Dhabi Bank"
+  },
+  {
+    "short_name": "NBO",
+    "bic": "NBOMOMRX",
+    "bank_name": "National Bank Of Oman"
+  },
+  {
+    "short_name": "BDOF",
+    "bic": "BDOFOMRU",
+    "bank_name": "Bank Dhofar"
+  },
+  {
+    "short_name": "BMCT",
+    "bic": "BMUSOMRX",
+    "bank_name": "Bank Of Muscat"
+  },
+  {
+    "short_name": "SBI",
+    "bic": "SBINOMRX",
+    "bank_name": "State Bank Of India"
+  },
+  {
+    "short_name": "BBUT",
+    "bic": "BABEOMRX",
+    "bank_name": "Bank Of Beirut"
+  },
+  {
+    "short_name": "BSHR",
+    "bic": "BSHROMRU",
+    "bank_name": "Bank Sohar S.A.O.G"
+  },
+  {
+    "short_name": "ALHL",
+    "bic": "AUBOOMRU",
+    "bank_name": "Al-Ahli Bank S.A.O.G"
+  },
+  {
+    "short_name": "QNB",
+    "bic": "QNBAOMRX",
+    "bank_name": "Qatar National bank"
+  },
+  {
+    "short_name": "BNZW",
+    "bic": "BNZWOMRX",
+    "bank_name": "Nizwa bank"
+  },
+  {
+    "short_name": "MTHQ",
+    "bic": "BMUSOMRXISL",
+    "bank_name": "Bank Muscat Meethaq Islamic"
+  },
+  {
+    "short_name": "MUZN",
+    "bic": "NBOMOMRXIBS",
+    "bank_name": "Muzn Islamic Banking"
+  },
+  {
+    "short_name": "MISR",
+    "bic": "BDOFOMRUMIB",
+    "bank_name": "MAISARAH Islamic Banking Services"
+  },
+  {
+    "short_name": "HLAL",
+    "bic": "AUBOOMRUALH",
+    "bank_name": "AHLI Islamic Bank (HILAL)"
+  },
+  {
+    "short_name": "SHRI",
+    "bic": "BSHROMRUISL",
+    "bank_name": "Bank Sohar Islamic Window"
+  },
+  {
+    "short_name": "YUSR",
+    "bic": "OMABOMRUYSR",
+    "bank_name": "Al Yusr Islamic Banking"
+  },
+  {
+    "short_name": "ODB",
+    "bic": "ODBLOMRX",
+    "bank_name": "Oman Development Bank"
+  },
+  {
+    "short_name": "IZZB",
+    "bic": "IZZBOMRU",
+    "bank_name": "Al Izz Islamic Bank"
+  },
+  {
+    "short_name": "OHB",
+    "bic": "OHBLOMRX",
+    "bank_name": "Oman Housing Bank"
+  },
+  {
+    "short_name": "HBME",
+    "bic": "HBMEOMR",
+    "bank_name": "HSBC Bank Middle East Limited - Oman Branch"
+  },
+  {
+    "short_name": "MSHQ",
+    "bic": "MSHQOMRX",
+    "bank_name": "Bank Mashreq"
+  },
+  {
+    "short_name": "OIBB",
+    "bic": "OIBBOMRX",
+    "bank_name": "Oman Investment Bank"
+  }
+]

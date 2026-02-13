@@ -1,39 +1,21 @@
+import json
 import re
 from datetime import datetime
 from decimal import Decimal, ROUND_HALF_UP
+from pathlib import Path
 
 import pandas as pd
 import streamlit as st
 from openpyxl import Workbook
 from openpyxl.utils.dataframe import dataframe_to_rows
 
-# Bank Identification Codes from your bank guide (Section 8)  [oai_citation:2‡dfr-islamic-guide-english-wps.pdf](sediment://file_0000000007a0722fbd978cd25b70b470)
-BANK_BIC = {
-    "BANK DHOFAR": "BDOFOMRU",
-    "Bank Muscat": "BMUSOMRX",
-    "National Bank of Oman": "NBOMOMRX",
-    "Oman Arab Bank": "OMABOMRU",
-    "Bank Sohar": "BSHROMRU",
-    "HSBC Bank Oman": "BBMEOMRX",
-    "Ahli Bank": "AUBOOMRU",
-    "Oman Development Bank": "ODBLOMRX",
-    "Oman Housing Bank": "OHBLOMRX",
-    "Bank Nizwa": "BNZWOMRX",
-    "Dhofar Islamic Banking": "BDOFOMRUMIB",
-    "Bank Muscat Meethaq": "BMUSOMRXISL",
-    "NBO Muzn": "NBOMOMRXIBS",
-    "Al Hilal Ahli Bank": "AUBOOMRUALH",
-    "National Bank of Abu Dhabi": "NBADOMRX",
-    "Qatar National Bank": "QNBAOMRX",
-    "Standard Chartered Bank": "SCBLOMRX",
-    "Bank of Beirut": "BABEOMRX",
-    "Bank of Baroda": "BARBOMMX",
-    "State Bank of India": "SBINOMRX",
-    "Habib Bank Limited": "HABBOMRX",
-    "AL IZZ ISLAMIC BANK": "IZZBOMRU",
-    "Bank Sohar Islamic Window": "BSHROMRUISL",
-    "Al Yusr Islamic Banking": "OMABOMRUYSR",
-}
+# Load banks from JSON (converted from Omani Banks List.xlsx)
+BANKS_JSON_PATH = Path(__file__).parent / "omani_banks.json"
+with open(BANKS_JSON_PATH, encoding="utf-8") as f:
+    BANKS_DATA = json.load(f)
+
+BANK_OPTIONS = [b["short_name"] for b in BANKS_DATA]
+BANK_BY_SHORT = {b["short_name"]: b for b in BANKS_DATA}
 
 # --- Helpers ---
 DEC3 = Decimal("0.001")
@@ -187,7 +169,12 @@ with st.expander("Employer / Payer Details", expanded=True):
         payer_cr = st.text_input("Payer CR-NO", value="")
         payer_account = st.text_input("Payer Account Number", value="")
     with c2:
-        payer_bank_short = st.text_input("Payer Bank Short Name (e.g. BMCT, SBI)", value="BMCT")
+        payer_bank_short = st.selectbox(
+            "Employer Bank",
+            options=BANK_OPTIONS,
+            index=BANK_OPTIONS.index("BMCT") if "BMCT" in BANK_OPTIONS else 0,
+            format_func=lambda x: BANK_BY_SHORT[x]["bank_name"],
+        )
         salary_year = st.number_input("Salary Year (YYYY)", min_value=2000, max_value=2100, value=datetime.now().year, step=1)
         salary_month = st.number_input("Salary Month (MM)", min_value=1, max_value=12, value=datetime.now().month, step=1)
     with c3:
@@ -225,10 +212,6 @@ employees_df = st.data_editor(
     num_rows="dynamic",
     width="stretch"
 )
-
-# Show quick bank code helper
-with st.expander("Bank BIC Code Helper (from bank guide)"):
-    st.write(pd.DataFrame([{"Bank": k, "BIC": v} for k, v in BANK_BIC.items()]))
 
 # Generate
 st.divider()
