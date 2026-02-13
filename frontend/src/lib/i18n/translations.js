@@ -2,7 +2,7 @@ export const translations = {
   en: {
     appTitle: 'Oman WPS (SIF) Excel Generator',
     themeToggle: 'Toggle Theme',
-    languageToggle: 'AR',
+    languageToggle: 'عربية',
     sections: {
       employerPayer: 'Employer / Payer Details',
       employees: 'Employees',
