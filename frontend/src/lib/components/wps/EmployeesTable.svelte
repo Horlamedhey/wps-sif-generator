@@ -4,6 +4,7 @@
   import { Button } from '$lib/components/ui/button';
   import { Label } from '$lib/components/ui/label';
   import * as Select from '$lib/components/ui/select';
+  import OmrSymbol from '$lib/components/wps/OmrSymbol.svelte';
   import { employeeHeaders, employeeFieldKeys, createEmployee, withCalculatedNetSalary } from '$lib/wps/employee';
 
   export let form = {
@@ -47,6 +48,7 @@
 
   const inputClass =
     'h-10 rounded-md border border-[#2a3853] bg-[#1b2436] text-[#dbe5f6] placeholder:text-[#7887a3] focus-visible:ring-2 focus-visible:ring-[#4a8cff]/50 focus-visible:border-[#4a8cff]';
+  const currencyInputClass = `${inputClass} pl-12`;
   const selectTriggerClass = `${inputClass} w-full justify-between px-3 text-sm font-normal`;
   const selectContentClass = 'border border-[#2a3853] bg-[#0f1727] text-[#dbe5f6]';
   const selectItemClass = 'text-[#dbe5f6]';
@@ -554,25 +556,35 @@
 
         <div class="space-y-1.5">
           <Label class="text-xs font-medium text-[#96a5bf]" for="new-net-salary">{labels.netSalaryAuto || 'Net Salary (Auto-calculated)'}</Label>
-          <Input
-            id="new-net-salary"
-            class={inputClass}
-            disabled
-            type="text"
-            value={draftEmployee.net_salary}
-          />
+          <div class="relative">
+            <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+              <OmrSymbol />
+            </span>
+            <Input
+              id="new-net-salary"
+              class={currencyInputClass}
+              disabled
+              type="text"
+              value={draftEmployee.net_salary}
+            />
+          </div>
         </div>
 
         <div class="space-y-1.5">
           <Label class="text-xs font-medium text-[#96a5bf]" for="new-basic-salary">{labels.basicSalary || 'Basic Salary'}</Label>
-          <Input
-            id="new-basic-salary"
-            class={inputClass}
-            inputmode="decimal"
-            oninput={(event) => updateDraftField('basic_salary', event.currentTarget.value)}
-            type="text"
-            value={draftEmployee.basic_salary}
-          />
+          <div class="relative">
+            <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+              <OmrSymbol />
+            </span>
+            <Input
+              id="new-basic-salary"
+              class={currencyInputClass}
+              inputmode="decimal"
+              oninput={(event) => updateDraftField('basic_salary', event.currentTarget.value)}
+              type="text"
+              value={draftEmployee.basic_salary}
+            />
+          </div>
         </div>
       </div>
 
@@ -591,38 +603,53 @@
 
         <div class="space-y-1.5">
           <Label class="text-xs font-medium text-[#96a5bf]" for="new-extra-income">{labels.extraIncome || 'Extra Income'}</Label>
-          <Input
-            id="new-extra-income"
-            class={inputClass}
-            inputmode="decimal"
-            oninput={(event) => updateDraftField('extra_income', event.currentTarget.value)}
-            type="text"
-            value={draftEmployee.extra_income}
-          />
+          <div class="relative">
+            <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+              <OmrSymbol />
+            </span>
+            <Input
+              id="new-extra-income"
+              class={currencyInputClass}
+              inputmode="decimal"
+              oninput={(event) => updateDraftField('extra_income', event.currentTarget.value)}
+              type="text"
+              value={draftEmployee.extra_income}
+            />
+          </div>
         </div>
 
         <div class="space-y-1.5">
           <Label class="text-xs font-medium text-[#96a5bf]" for="new-deductions">{labels.deductions || 'Deductions'}</Label>
-          <Input
-            id="new-deductions"
-            class={inputClass}
-            inputmode="decimal"
-            oninput={(event) => updateDraftField('deductions', event.currentTarget.value)}
-            type="text"
-            value={draftEmployee.deductions}
-          />
+          <div class="relative">
+            <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+              <OmrSymbol />
+            </span>
+            <Input
+              id="new-deductions"
+              class={currencyInputClass}
+              inputmode="decimal"
+              oninput={(event) => updateDraftField('deductions', event.currentTarget.value)}
+              type="text"
+              value={draftEmployee.deductions}
+            />
+          </div>
         </div>
 
         <div class="space-y-1.5">
           <Label class="text-xs font-medium text-[#96a5bf]" for="new-social-security">{labels.socialSecurityDeductions || 'Social Security Deductions'}</Label>
-          <Input
-            id="new-social-security"
-            class={inputClass}
-            inputmode="decimal"
-            oninput={(event) => updateDraftField('social_security_deductions', event.currentTarget.value)}
-            type="text"
-            value={draftEmployee.social_security_deductions}
-          />
+          <div class="relative">
+            <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+              <OmrSymbol />
+            </span>
+            <Input
+              id="new-social-security"
+              class={currencyInputClass}
+              inputmode="decimal"
+              oninput={(event) => updateDraftField('social_security_deductions', event.currentTarget.value)}
+              type="text"
+              value={draftEmployee.social_security_deductions}
+            />
+          </div>
         </div>
 
         <div class="space-y-1.5">
