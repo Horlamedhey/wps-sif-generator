@@ -39,6 +39,21 @@ app.add_middleware(
 )
 
 
+@app.get("/", include_in_schema=False)
+def root() -> dict:
+    return {
+        "name": "Oman WPS SIF API",
+        "status": "ok",
+        "docs": "/docs",
+        "health": "/health",
+        "endpoints": {
+            "banks": "/api/banks",
+            "preview": "/api/sif/preview",
+            "generate": "/api/sif/generate",
+        },
+    }
+
+
 @app.get("/health")
 def health() -> dict:
     return {"status": "ok"}

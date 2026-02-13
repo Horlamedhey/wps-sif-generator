@@ -8,6 +8,8 @@ services:
     healthCheckPath: /health
     autoDeploy: true
     envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.9
       - key: CORS_ALLOW_ORIGINS
         value: https://your-production-frontend.vercel.app
       - key: CORS_ALLOW_ORIGIN_REGEX

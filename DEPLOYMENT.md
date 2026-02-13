@@ -12,6 +12,7 @@
    - Build: `pip install -r requirements.txt`
    - Start: `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
 5. Configure env vars:
+   - `PYTHON_VERSION=3.12.9` (important: avoid Render default Python 3.14 for now)
    - `CORS_ALLOW_ORIGINS=https://<your-vercel-production-domain>`
    - `CORS_ALLOW_ORIGIN_REGEX=https://.*\\.vercel\\.app`
 6. Confirm `GET /health` returns `{"status":"ok"}`.

@@ -4,7 +4,12 @@
 import json
 from pathlib import Path
 
-import pandas as pd
+try:
+    import pandas as pd
+except ImportError as exc:
+    raise SystemExit(
+        "This script requires pandas. Install it first, e.g. `pip install pandas`."
+    ) from exc
 
 BACKEND_ROOT = Path(__file__).resolve().parent.parent
 XLSX_PATH = BACKEND_ROOT / "data" / "source" / "Omani Banks List.xlsx"
