@@ -56,9 +56,13 @@
   const maxSelectableDate = minSelectableDate.add({ days: 7 });
   let selectedBankLabel = 'Select employer bank';
   let selectedMonthLabel = 'Select month';
+  let selectedEmployerBank = null;
 
   $: processingDateValue = parseDateSafe(form.processingDate);
-  $: selectedBankLabel = banks.find((bank) => bank.short_name === form.payerBankShort)?.bank_name || 'Select employer bank';
+  $: selectedEmployerBank = banks.find((bank) => bank.short_name === form.payerBankShort) || null;
+  $: selectedBankLabel = selectedEmployerBank
+    ? `${selectedEmployerBank.short_name} - ${selectedEmployerBank.bank_name}`
+    : 'Select employer bank';
   $: selectedMonthLabel =
     monthOptions.find((month) => month.value === String(form.salaryMonth))?.label || 'Select month';
 
@@ -125,170 +129,168 @@
 </script>
 
 <Card class="rounded-[10px] border border-[#243247] bg-[linear-gradient(180deg,rgba(17,24,39,0.98),rgba(9,16,30,0.96))] p-3 shadow-none gap-3">
-  <details open>
-    <summary class="mb-3 cursor-pointer text-sm font-semibold text-[#dbe5f6]">Employer / Payer Details</summary>
+  <h3 class="mb-3 text-sm font-semibold text-[#dbe5f6]">Employer / Payer Details</h3>
 
-    <div class="grid grid-cols-1 gap-3 xl:grid-cols-3">
-      <div class="space-y-3">
+  <div class="grid grid-cols-1 gap-3 xl:grid-cols-3">
+    <div class="space-y-3">
+      <div class="space-y-1.5">
+        <Label class={labelClass} for="employer-cr">Employer CR-NO</Label>
+        <Input
+          id="employer-cr"
+          class={inputClass}
+          inputmode="numeric"
+          oninput={(event) => handleDigitInput('employerCr', event)}
+          pattern="[0-9]*"
+          type="text"
+          value={form.employerCr}
+        />
+      </div>
+
+      <div class="space-y-2">
+        <div class="flex items-center gap-2 rounded-md border border-[#2a3853] bg-[#151d2d] px-3 py-2">
+          <Checkbox
+            id="same-employer"
+            class="border-[#2a3853] bg-[#101828] data-[state=checked]:border-[#4a8cff] data-[state=checked]:bg-[#2f5cab]"
+            checked={form.sameAsEmployer}
+            onCheckedChange={(checked) => updateField('sameAsEmployer', checked === true)}
+          />
+          <Label class="text-xs font-medium text-[#96a5bf]" for="same-employer">Same as Employer CR-NO</Label>
+        </div>
+
         <div class="space-y-1.5">
-          <Label class={labelClass} for="employer-cr">Employer CR-NO</Label>
+          <Label class={labelClass} for="payer-cr">Payer CR-NO</Label>
           <Input
-            id="employer-cr"
+            id="payer-cr"
             class={inputClass}
+            disabled={form.sameAsEmployer}
             inputmode="numeric"
-            oninput={(event) => handleDigitInput('employerCr', event)}
+            oninput={(event) => handleDigitInput('payerCr', event)}
             pattern="[0-9]*"
             type="text"
-            value={form.employerCr}
-          />
-        </div>
-
-        <div class="space-y-2">
-          <div class="flex items-center gap-2 rounded-md border border-[#2a3853] bg-[#151d2d] px-3 py-2">
-            <Checkbox
-              id="same-employer"
-              class="border-[#2a3853] bg-[#101828] data-[state=checked]:border-[#4a8cff] data-[state=checked]:bg-[#2f5cab]"
-              checked={form.sameAsEmployer}
-              onCheckedChange={(checked) => updateField('sameAsEmployer', checked === true)}
-            />
-            <Label class="text-xs font-medium text-[#96a5bf]" for="same-employer">Same as Employer CR-NO</Label>
-          </div>
-
-          <div class="space-y-1.5">
-            <Label class={labelClass} for="payer-cr">Payer CR-NO</Label>
-            <Input
-              id="payer-cr"
-              class={inputClass}
-              disabled={form.sameAsEmployer}
-              inputmode="numeric"
-              oninput={(event) => handleDigitInput('payerCr', event)}
-              pattern="[0-9]*"
-              type="text"
-              value={form.payerCr}
-            />
-          </div>
-        </div>
-
-        <div class="space-y-1.5">
-          <Label class={labelClass} for="payer-account">Payer Account Number</Label>
-          <Input
-            id="payer-account"
-            class={inputClass}
-            oninput={(event) => updateField('payerAccount', event.currentTarget.value)}
-            type="text"
-            value={form.payerAccount}
+            value={form.payerCr}
           />
         </div>
       </div>
 
-      <div class="space-y-3">
-        <div class="space-y-1.5">
-          <Label class={labelClass} for="employer-bank">Employer Bank</Label>
+      <div class="space-y-1.5">
+        <Label class={labelClass} for="payer-account">Payer Account Number</Label>
+        <Input
+          id="payer-account"
+          class={inputClass}
+          oninput={(event) => updateField('payerAccount', event.currentTarget.value)}
+          type="text"
+          value={form.payerAccount}
+        />
+      </div>
+    </div>
 
-          {#if loadingBanks || banksError || banks.length === 0}
-            <Input
-              id="employer-bank"
-              class={inputClass}
-              disabled
-              type="text"
-              value={loadingBanks ? 'Loading banks...' : banksError || 'No banks available'}
-            />
-          {:else}
-            <Select.Root type="single" value={form.payerBankShort} onValueChange={handleBankChange}>
-              <Select.Trigger class={selectTriggerClass} id="employer-bank">
-                {selectedBankLabel}
-              </Select.Trigger>
-              <Select.Content class={selectContentClass}>
-                {#each banks as bank}
-                  <Select.Item class={selectItemClass} label={bank.bank_name} value={bank.short_name}>
-                    {bank.bank_name}
-                  </Select.Item>
-                {/each}
-              </Select.Content>
-            </Select.Root>
-          {/if}
-        </div>
+    <div class="space-y-3">
+      <div class="space-y-1.5">
+        <Label class={labelClass} for="employer-bank">Employer Bank</Label>
 
-        <div class="space-y-1.5">
-          <Label class={labelClass} for="salary-year">Salary Year (YYYY)</Label>
+        {#if loadingBanks || banksError || banks.length === 0}
           <Input
-            id="salary-year"
+            id="employer-bank"
             class={inputClass}
-            min="2000"
-            max="2100"
-            oninput={(event) => updateField('salaryYear', Number(event.currentTarget.value))}
-            step="1"
-            type="number"
-            value={form.salaryYear}
+            disabled
+            type="text"
+            value={loadingBanks ? 'Loading banks...' : banksError || 'No banks available'}
           />
-        </div>
-
-        <div class="space-y-1.5">
-          <Label class={labelClass} for="salary-month">Salary Month (MM)</Label>
-          <Select.Root type="single" value={String(form.salaryMonth)} onValueChange={handleMonthChange}>
-            <Select.Trigger class={selectTriggerClass} id="salary-month">
-              {selectedMonthLabel}
+        {:else}
+          <Select.Root type="single" value={form.payerBankShort} onValueChange={handleBankChange}>
+            <Select.Trigger class={selectTriggerClass} id="employer-bank">
+              {selectedBankLabel}
             </Select.Trigger>
             <Select.Content class={selectContentClass}>
-              {#each monthOptions as month}
-                <Select.Item class={selectItemClass} label={month.label} value={month.value}>
-                  {month.label}
+              {#each banks as bank}
+                <Select.Item class={selectItemClass} label={`${bank.short_name} - ${bank.bank_name}`} value={bank.short_name}>
+                  {bank.short_name} - {bank.bank_name}
                 </Select.Item>
               {/each}
             </Select.Content>
           </Select.Root>
-        </div>
+        {/if}
       </div>
 
-      <div class="space-y-3">
-        <div class="space-y-1.5">
-          <Label class={labelClass} for="payment-type">Payment Type</Label>
-          <Input
-            id="payment-type"
-            class={inputClass}
-            oninput={(event) => updateField('paymentType', event.currentTarget.value)}
-            type="text"
-            value={form.paymentType}
-          />
-        </div>
+      <div class="space-y-1.5">
+        <Label class={labelClass} for="salary-year">Salary Year (YYYY)</Label>
+        <Input
+          id="salary-year"
+          class={inputClass}
+          min="2000"
+          max="2100"
+          oninput={(event) => updateField('salaryYear', Number(event.currentTarget.value))}
+          step="1"
+          type="number"
+          value={form.salaryYear}
+        />
+      </div>
 
-        <div class="space-y-1.5">
-          <Label class={labelClass} for="processing-date">Processing date (used for file name)</Label>
-
-          <Popover.Root bind:open={processingDateOpen}>
-            <Popover.Trigger class={dateTriggerClass} id="processing-date">
-              <span class="truncate">{formatDateForDisplay(form.processingDate)}</span>
-              <CalendarDays class="size-4 text-[#96a5bf]" />
-            </Popover.Trigger>
-            <Popover.Content align="start" class="w-auto border border-[#2a3853] bg-[#0f1727] p-0">
-              <Calendar
-                type="single"
-                value={processingDateValue}
-                onValueChange={handleDateChange}
-                captionLayout="dropdown"
-                class="rounded-md border-0 bg-transparent p-3"
-                minValue={minSelectableDate}
-                maxValue={maxSelectableDate}
-                initialFocus
-              />
-            </Popover.Content>
-          </Popover.Root>
-        </div>
-
-        <div class="space-y-1.5">
-          <Label class={labelClass} for="sequence">File sequence number</Label>
-          <Input
-            id="sequence"
-            class={inputClass}
-            min="1"
-            max="999"
-            oninput={(event) => updateField('seq', Number(event.currentTarget.value))}
-            step="1"
-            type="number"
-            value={form.seq}
-          />
-        </div>
+      <div class="space-y-1.5">
+        <Label class={labelClass} for="salary-month">Salary Month (MM)</Label>
+        <Select.Root type="single" value={String(form.salaryMonth)} onValueChange={handleMonthChange}>
+          <Select.Trigger class={selectTriggerClass} id="salary-month">
+            {selectedMonthLabel}
+          </Select.Trigger>
+          <Select.Content class={selectContentClass}>
+            {#each monthOptions as month}
+              <Select.Item class={selectItemClass} label={month.label} value={month.value}>
+                {month.label}
+              </Select.Item>
+            {/each}
+          </Select.Content>
+        </Select.Root>
       </div>
     </div>
-  </details>
+
+    <div class="space-y-3">
+      <div class="space-y-1.5">
+        <Label class={labelClass} for="payment-type">Payment Type</Label>
+        <Input
+          id="payment-type"
+          class={inputClass}
+          oninput={(event) => updateField('paymentType', event.currentTarget.value)}
+          type="text"
+          value={form.paymentType}
+        />
+      </div>
+
+      <div class="space-y-1.5">
+        <Label class={labelClass} for="processing-date">Processing date (used for file name)</Label>
+
+        <Popover.Root bind:open={processingDateOpen}>
+          <Popover.Trigger class={dateTriggerClass} id="processing-date">
+            <span class="truncate">{formatDateForDisplay(form.processingDate)}</span>
+            <CalendarDays class="size-4 text-[#96a5bf]" />
+          </Popover.Trigger>
+          <Popover.Content align="start" class="w-auto border border-[#2a3853] bg-[#0f1727] p-0">
+            <Calendar
+              type="single"
+              value={processingDateValue}
+              onValueChange={handleDateChange}
+              captionLayout="dropdown"
+              class="rounded-md border-0 bg-transparent p-3"
+              minValue={minSelectableDate}
+              maxValue={maxSelectableDate}
+              initialFocus
+            />
+          </Popover.Content>
+        </Popover.Root>
+      </div>
+
+      <div class="space-y-1.5">
+        <Label class={labelClass} for="sequence">File sequence number</Label>
+        <Input
+          id="sequence"
+          class={inputClass}
+          min="1"
+          max="999"
+          oninput={(event) => updateField('seq', Number(event.currentTarget.value))}
+          step="1"
+          type="number"
+          value={form.seq}
+        />
+      </div>
+    </div>
+  </div>
 </Card>

@@ -19,6 +19,29 @@ export const employeeColumns = [
 export const employeeHeaders = employeeColumns.map((column) => column.label);
 export const employeeFieldKeys = employeeColumns.map((column) => column.key);
 
+const ZERO = 0;
+
+function toNumberOrZero(value) {
+  const number = Number(value);
+  return Number.isFinite(number) ? number : ZERO;
+}
+
+export function calculateNetSalary(employee) {
+  const net =
+    toNumberOrZero(employee.basic_salary) +
+    toNumberOrZero(employee.extra_income) -
+    toNumberOrZero(employee.deductions) -
+    toNumberOrZero(employee.social_security_deductions);
+  return net.toFixed(3);
+}
+
+export function withCalculatedNetSalary(employee) {
+  return {
+    ...employee,
+    net_salary: calculateNetSalary(employee)
+  };
+}
+
 export function createEmployee() {
   return {
     employee_id_type: 'C',

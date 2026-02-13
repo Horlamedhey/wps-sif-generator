@@ -52,7 +52,7 @@
   <Button
     class="h-10 min-w-[170px] rounded-md border border-[#2f5cab] bg-[linear-gradient(180deg,#2756a3,#1b3f7a)] px-4 font-semibold text-white hover:brightness-110"
     disabled={generating}
-    on:click={generateFile}
+    onclick={generateFile}
     type="button"
   >
     {generating ? 'Generating...' : 'Generate .xlsx'}

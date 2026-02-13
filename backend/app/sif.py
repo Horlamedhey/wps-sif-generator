@@ -2,7 +2,7 @@ import io
 import json
 import re
 from datetime import date
-from decimal import Decimal, ROUND_HALF_UP
+from decimal import Decimal, InvalidOperation, ROUND_HALF_UP
 from pathlib import Path
 from typing import List, Tuple
 
@@ -35,14 +35,22 @@ REQUIRED_COLS = [
 def q3(value) -> str:
     if value in (None, ""):
         return "0.000"
-    d = Decimal(str(value)).quantize(DEC3, rounding=ROUND_HALF_UP)
+    try:
+        decimal_value = Decimal(str(value))
+    except (InvalidOperation, TypeError, ValueError):
+        decimal_value = Decimal("0")
+    d = decimal_value.quantize(DEC3, rounding=ROUND_HALF_UP)
     return f"{d:.3f}"
 
 
 def q2(value) -> str:
     if value in (None, ""):
         return "0.00"
-    d = Decimal(str(value)).quantize(DEC2, rounding=ROUND_HALF_UP)
+    try:
+        decimal_value = Decimal(str(value))
+    except (InvalidOperation, TypeError, ValueError):
+        decimal_value = Decimal("0")
+    d = decimal_value.quantize(DEC2, rounding=ROUND_HALF_UP)
     return f"{d:.2f}"
 
 
@@ -74,7 +82,17 @@ def normalize_employee(employee: EmployeeRow) -> EmployeeRow:
     if not str(working_days).isdigit():
         working_days = "0"
 
-    net_salary = q3(employee.net_salary)
+    basic_salary = q3(employee.basic_salary)
+    extra_income = q3(employee.extra_income)
+    deductions = q3(employee.deductions)
+    social_security_deductions = q3(employee.social_security_deductions)
+    net_salary_decimal = (
+        Decimal(basic_salary)
+        + Decimal(extra_income)
+        - Decimal(deductions)
+        - Decimal(social_security_deductions)
+    )
+    net_salary = f"{net_salary_decimal.quantize(DEC3, rounding=ROUND_HALF_UP):.3f}"
     notes = safe_text(employee.notes_comments, 300)
     if Decimal(net_salary) == Decimal("0.000") and notes == "":
         notes = "Net salary is 0"
@@ -89,11 +107,11 @@ def normalize_employee(employee: EmployeeRow) -> EmployeeRow:
         salary_frequency=salary_frequency,
         number_of_working_days=working_days,
         net_salary=net_salary,
-        basic_salary=q3(employee.basic_salary),
+        basic_salary=basic_salary,
         extra_hours=q2(employee.extra_hours),
-        extra_income=q3(employee.extra_income),
-        deductions=q3(employee.deductions),
-        social_security_deductions=q3(employee.social_security_deductions),
+        extra_income=extra_income,
+        deductions=deductions,
+        social_security_deductions=social_security_deductions,
         notes_comments=notes,
     )
 

@@ -73,3 +73,28 @@
     appearance: textfield;
   }
 }
+
+.stylish-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #3d5f94 #0f1727;
+}
+
+.stylish-scrollbar::-webkit-scrollbar {
+  height: 12px;
+  width: 12px;
+}
+
+.stylish-scrollbar::-webkit-scrollbar-track {
+  background: #0f1727;
+  border-radius: 999px;
+}
+
+.stylish-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(90deg, #2f5cab 0%, #3d6fca 100%);
+  border: 2px solid #0f1727;
+  border-radius: 999px;
+}
+
+.stylish-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(90deg, #3b70c9 0%, #4f86e6 100%);
+}
