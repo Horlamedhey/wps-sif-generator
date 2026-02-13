@@ -33,8 +33,7 @@
     salaryMonth: now.getMonth() + 1,
     paymentType: 'Salary',
     processingDate: toLocalIsoDate(now),
-    seq: 1,
-    sheetName: 'Sheet1'
+    seq: 1
   };
 
   let employees = [];
@@ -160,8 +159,7 @@
       salaryMonth: 2,
       paymentType: 'Salary',
       processingDate: todayIso,
-      seq: 1,
-      sheetName: 'Sheet1'
+      seq: 1
     };
 
     seededEmployeeDraft = {
@@ -196,7 +194,6 @@
       payment_type: form.paymentType,
       processing_date: form.processingDate,
       seq: Number(form.seq),
-      sheet_name: form.sheetName,
       employees: normalizedEmployees
     };
   }
@@ -453,11 +450,9 @@
   <GeneratePanel
     {generating}
     {generateFile}
-    bind:sheetName={form.sheetName}
     {status}
     {error}
     {previewInfo}
-    labels={t.labels}
     buttonLabels={t.buttons}
   />
 </main>

@@ -34,8 +34,7 @@ export const translations = {
       extraIncome: 'Extra Income',
       deductions: 'Deductions',
       socialSecurityDeductions: 'Social Security Deductions',
-      notesComments: 'Notes / Comments',
-      sheetName: 'Sheet name'
+      notesComments: 'Notes / Comments'
     },
     tip: 'Tip: Add a row through the form, then you can still edit directly in the table. Net Salary is auto-calculated as Basic Salary + Extra Income - Deductions - Social Security Deductions.',
     buttons: {
@@ -81,8 +80,7 @@ export const translations = {
       extraIncome: 'دخل إضافي',
       deductions: 'الاستقطاعات',
       socialSecurityDeductions: 'استقطاعات الضمان الاجتماعي',
-      notesComments: 'ملاحظات / تعليقات',
-      sheetName: 'اسم الورقة'
+      notesComments: 'ملاحظات / تعليقات'
     },
     tip: 'ملاحظة: أضف صفاً عبر النموذج، وبعدها يمكنك التعديل مباشرة داخل الجدول. يتم احتساب صافي الراتب تلقائياً كالتالي: الراتب الأساسي + الدخل الإضافي - الاستقطاعات - استقطاعات الضمان الاجتماعي.',
     buttons: {

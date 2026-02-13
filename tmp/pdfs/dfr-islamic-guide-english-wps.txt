@@ -1,0 +1,362 @@
+              Corporate Payroll Process (WPS) – Internet Banking
+
+
+
+
+Confidentiality and Disclaimer
+This document, which contains confidential material, is private and is the property and copyright of Dhofar Islamic
+banking. It is not to be used for any other purposes, copied, distributed or transmitted in any form or by any means
+without the prior written consent of a duly authorized representative of Dhofar Islamic banking.
+Contents
+
+1.     Introduction ................................................................................................................................................3
+2.     Online Banking login Page ........................................................................................................................3-4
+3.     Submit WPS file ........................................................................................................................................... 5-10
+4.     Approve WPS File ............................................................................................................................... 11-12
+5.     Report .................................................................................................................................................13-14
+6.     Salary File Format (xls /xlsx) ...................................................................................................................... 15
+7. .   Salary File Format Guideline & Validations: .......................................................................................... 15-16
+8. .   Bank Identification Codes:......................................................................................................................... 17
+9.     Note.......................................................................................................................................................... 18
+
+
+
+
+                                                                                                                                                                           2
+1. Introduction:
+
+   As part of our endeavor to provide the best to our customers, and in collaboration with Ministry
+   of Manpower and the Central Bank of Oman, we would like to introduce to you the new Wage
+   Protection System. The new wage protection system will be able to track employees’ salaries
+   and their transfer to their accounts at local banks in accordance with stipulated laws and
+   conditions in Labor Law. The new WPS focuses on creating an accurate database concerning
+   working wages.
+
+
+
+
+2. Online banking login page
+   To access corporate Internet banking, follow the below steps:
+      1. Access Dhofar Islamic Banking home page:
+          https://www.dhofarislamic.com/wholesale-banking/
+
+      2. Click on Online Banking and then Corporate Banking Login
+
+
+
+
+                                                                                                      3
+3. Internet banking login screen will appear where user should fill corporate ID, user ID,
+   and password and click on login
+
+
+
+
+                                                                                             4
+   3. Submit WPS file
+
+
+
+
+Select Transfers and Payments from the screen to process the employee salary.
+
+
+
+
+                                                                                5
+Select Wage protection system then File upload option to process the payroll.
+The customer ID no, the processing charges and the other bank processing charges will be
+displayed in the screen
+
+
+
+
+The file Upload screen will appear
+
+
+
+
+                                                                                           6
+1. Select Payment type from the dropdown list. Payment types allowed as per below:
+
+
+
+
+2. Select debit account number for the dropdown list “Transfer From”.
+
+      Only List of customer account numbers registered in WPS will appear here. After selecting
+      account number, the available balance of the account will get displayed. Note: in case the
+      customer has valid overdraft facility, the same will be included in the available balance.
+
+
+
+
+                       01616XXXXXX001
+
+
+
+
+                                                                                                   7
+3. Enter the total amount of the file in OMR, select processing date and enter Remarks if any
+
+
+
+
+     01616******001
+
+
+
+
+                      Note:
+                      a. Future date processing is allowed up to 7 days.
+                      b. The total amount entered by the user should be equal to the total amount of all
+                         transactions available in the file that the user will upload
+
+
+
+
+                                                                                                           8
+4. Click on Choose file to select the file from the stored location then click on Upload.
+
+
+
+
+5. The user will be directed to another screen displaying the details of the uploaded WPS file. Click on
+   Ok to proceed
+
+
+
+
+                                01616******001
+
+
+
+
+         1111   XXXXXXX   BDOFOMRUMIB
+         11
+
+
+
+
+                                                                                                           9
+6. The user will be directed to the authentication matrix screen where the user should input
+   transaction password and then click on Submit.
+
+
+
+
+         Upon clicking on Submit, the file will be submitted successfully.
+
+
+
+
+                                                                                               10
+       4. Approve WPS file
+   If the corporates are requested form authority matrix for approval process, the same will be
+   applied while processing the salary. After approval obtained by the matrix, salary file will be
+   sent to bank for further process.
+
+   Below are the steps for approval:
+      1. Approval User login to the system
+      2. Scroll down the Home page and go to Approval List. Here all the pending request
+          pending for approval will be listed. Select the request you need to approve by clicking
+          on View Details.
+
+
+
+
+       3. The user will have the option to either Approve or Reject the File
+
+
+
+
+                        01616******001
+
+
+
+
+1111    XXXXXXX   BDOFOMRUMIB
+11
+
+
+
+
+                                                                                                     11
+   4. Click on approve, enter transaction password, and then click on Submit
+
+
+
+
+Upon clicking on Submit, the file will be approved successfully.
+
+
+
+
+As per CBO guideline, both within Bank and Other Bank account salaries will be routed through
+CBO and it will be credited to the employee account after the validation.
+
+
+                                                                                                12
+   5. Report
+To view reports of submitted requests and the status of each follow the below steps:
+   1. Click on Transfers and Payments. Then click on Reports under Wage protection system
+
+
+
+
+   2. The user will have the option to search/ filter for requests based on many criterial such
+      as Date from, Date to, Reference number, File Name and status.
+      Note: If no selection is done, then upon clicking on Filter, all requests up to date will be
+      listed.
+
+
+
+
+                                                                                                     13
+3. The list of submitted files/ requests will be displayed to the user. The user will have
+   option to view file details, print, download in excel or download in pdf format.
+
+
+
+
+                                                                                             14
+             6. Salary File Format (.xls or .xlsx)
+
+         Salary file format with sample date below:
+
+
+         WPS sample file.xlsx
+
+
+
+      7. Salary File Format Guideline & Validations:
+
+Sr No
+                Field Name      Data Type   *M/O      Size                            Remarks & Validations
+ 1      Salary Year             Number      M                4   The year of the salaries (formatted as yyyy)
+ 2      Salary Month            Number      M                2   The month of the salaries (formatted as MM)
+                                                                 salary month Should be within +/-3 months of the current date
+ 3      Employee ID Type        String      M                1   The type of identification document for the employee.
+                                                                 Possible values as follows: If Passport “P” If Civil ID “C”
+ 4      Employee ID             String      M            17      The employee identification number associated with the
+                                                                 provided identification document.
+ 5      Employee Name           String      M            70      Name of the employee (as provided in the identification
+                                                                 document)
+ 6      Employee Bank           Character   M            11      The code of the bank where employee has his / her account.
+        Identification Code                                      Refer to Bank Identification codes list below.
+ 7      Employee                String      M            30      The Account Number of the employee, to which the salaries
+        Account                                                  will be credited.
+        Number
+ 8      Salary Frequency        Character   M                1   The frequency of the paid salary. It shall be one of the following
+                                                                 values:
+                                                                 · “B” – Bi-weekly · “M” – Monthly
+ 9      Number of Working       Number      M                3   Total number of days that employee worked during the month.
+        days
+ 10     Net Salary              Decimal     M           9,3      It is the exact number that employee is going to receive from
+                                                                 employer for the specified salary month, in Omani Riyals.
+                                                                 Net Salary = Basic Salary + Extra Income – Deduction – Social
+                                                                 Security Deduction.
+ 11     Basic Salary            Decimal     M           9,3      The amount that the Employer should pay to the employee
+                                                                 monthly, in Omani Riyals according to the contract or by the
+                                                                 law.
+                                                                 The basic salary should be more than 0 (zero) in case payment
+                                                                 type is salary. For other payment type basic salary should be
+                                                                 zero.
+ 12     Extra hours             Decimal     O           3,2      The total number of hours that employee worked after his
+                                                                 working hours (shift) or during the holidays. If left blank system
+                                                                 will default it to zero
+
+
+
+
+                                                                                                                             15
+13   Extra income              Decimal   O   9,3   Extra income is specified in Omani Riyals. It can include the
+                                                   following:
+                                                   · Transportation allowances
+                                                   · Housing allowances
+                                                   · Overtime
+                                                   · Working on holidays or vacation
+                                                   · Bonuses or raises
+                                                   · Any advance or late payments
+                                                   If left blank system will default it to zero
+14   Deductions                Decimal   O   9,3   Total deductions specified in Omani Riyals, to include below:
+                                                   · Violations against the country laws or violations
+                                                   · Loans payments
+                                                   · Coverage for damage caused by the employee to the
+                                                   company
+                                                   · Decrease the salary
+                                                   If left blank system will default it to zero
+15   Social Security           Decimal   O   9,3   Total deductions are specified in Omani Riyals for Social
+     Deductions                                    Security. If left blank system will default it to zero
+16   Notes                     String    O   300   Extra notes including justification for any divergence in the
+                                                   payments. It becomes mandatory if net salary is 0
+        * M – Mandatory, O – Optional
+
+
+
+
+                                                                                                             16
+8. Bank Identification Codes:
+
+    S.No    Bank Name                    Bank Code
+
+    1       BANK DHOFAR                  BDOFOMRU
+
+    2       Bank Muscat                  BMUSOMRX
+    3       National Bank of Oman        NBOMOMRX
+    4       Oman Arab Bank               OMABOMRU
+    5       Bank Sohar                   BSHROMRU
+
+    6       HSBC Bank Oman               BBMEOMRX
+    7       Ahli Bank                    AUBOOMRU
+
+    8       Oman Development Bank        ODBLOMRX
+    9       Oman Housing Bank            OHBLOMRX
+
+    10      Bank Nizwa                   BNZWOMRX
+    11      Dhofar Islamic Banking       BDOFOMRUMIB
+    12      Bank Muscat Meethaq          BMUSOMRXISL
+
+    13      NBO Muzn                     NBOMOMRXIBS
+    14      Al Hilal Ahli Bank           AUBOOMRUALH
+
+    15      National Bank of Abu Dhabi   NBADOMRX
+    16      Qatar National Bank          QNBAOMRX
+
+    17      Standard Chartered Bank      SCBLOMRX
+    18      Bank of Beirut               BABEOMRX
+    19      Bank of Baroda               BARBOMMX
+    20      State Bank of India          SBINOMRX
+
+    21      Habib Bank Limited           HABBOMRX
+    22      AL IZZ ISLAMIC BANK          IZZBOMRU
+
+    23      Bank Sohar Islamic Window    BSHROMRUISL
+    24      Al Yusr Islamic Banking      OMABOMRUYSR
+
+
+
+
+                                                       17
+9. Note:
+
+  •   Employer should be registered with Bank to process their employee salaries.
+  •   User should be registered in Internet Banking to process their employee salaries through
+      WPS.
+  •   Employer can submit their employee salary in .xls or .xlsx (excel) file format without header
+      to process salary via WPS.
+  •   File with more than one sheet will not be accepted.
+  •   All Records in a single file should with the same month.
+  •   All employee salaries (Within Bank account and Other Bank accounts in Oman) can be
+      processed in single file.
+  •   Bank process the employee salary based on the CBO cut off time and Bank working Hour.
+  •   File format will be validated while uploading the file in Internet Banking.
+  •   The status of the file will be updated in the system, according to the CBO response.
+  •   If any issue/ queries in the WPS upload process, kindly contact us on Call Center Number:
+      24775777 or through email Activate Dhofar Islamic Banking: activate@dhofarislamic.com
+
+
+
+
+                                                                                                      18
+
