@@ -5,6 +5,7 @@
   import EmployerPayerSection from '$lib/components/wps/EmployerPayerSection.svelte';
   import EmployeesTable from '$lib/components/wps/EmployeesTable.svelte';
   import GeneratePanel from '$lib/components/wps/GeneratePanel.svelte';
+  import { translations } from '$lib/i18n/translations';
   import { withCalculatedNetSalary } from '$lib/wps/employee';
 
   const API_BASE = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000').replace(/\/$/, '');
@@ -38,6 +39,12 @@
   let seededEmployeeDraft = null;
   let seedEmployeeRequestId = 0;
   let seedEmployeeSerial = 0;
+  let theme = 'light';
+  let language = 'en';
+  let systemThemeMedia = null;
+  let removeThemeListener = () => {};
+
+  $: t = translations[language] || translations.en;
 
   $: if (form.sameAsEmployer && form.payerCr !== form.employerCr) {
     form = { ...form, payerCr: form.employerCr };
@@ -66,6 +73,66 @@
       banksError = e instanceof Error ? e.message : 'Failed to load banks.';
     } finally {
       loadingBanks = false;
+    }
+  }
+
+  function detectSystemTheme() {
+    if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
+      return 'light';
+    }
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+
+  function applyTheme(nextTheme) {
+    if (typeof document === 'undefined') {
+      return;
+    }
+    const root = document.documentElement;
+    root.classList.remove('theme-light', 'theme-dark');
+    root.classList.add(nextTheme === 'dark' ? 'theme-dark' : 'theme-light');
+    root.dataset.theme = nextTheme;
+  }
+
+  function applyLanguage(nextLanguage) {
+    if (typeof document === 'undefined') {
+      return;
+    }
+    const root = document.documentElement;
+    root.lang = nextLanguage;
+    root.dir = nextLanguage === 'ar' ? 'rtl' : 'ltr';
+  }
+
+  function toggleTheme() {
+    theme = theme === 'dark' ? 'light' : 'dark';
+    safeStorageSet('wps-theme', theme);
+    applyTheme(theme);
+  }
+
+  function toggleLanguage() {
+    language = language === 'ar' ? 'en' : 'ar';
+    safeStorageSet('wps-language', language);
+    applyLanguage(language);
+  }
+
+  function safeStorageGet(key) {
+    if (typeof window === 'undefined') {
+      return null;
+    }
+    try {
+      return window.localStorage.getItem(key);
+    } catch {
+      return null;
+    }
+  }
+
+  function safeStorageSet(key, value) {
+    if (typeof window === 'undefined') {
+      return;
+    }
+    try {
+      window.localStorage.setItem(key, value);
+    } catch {
+      // localStorage can be unavailable in some privacy modes
     }
   }
 
@@ -264,16 +331,76 @@
     }
   }
 
-  onMount(loadBanks);
+  onMount(() => {
+    loadBanks();
+
+    if (typeof window !== 'undefined') {
+      try {
+        const savedTheme = safeStorageGet('wps-theme');
+        theme = savedTheme === 'dark' || savedTheme === 'light' ? savedTheme : detectSystemTheme();
+        applyTheme(theme);
+
+        if (!savedTheme && typeof window.matchMedia === 'function') {
+          systemThemeMedia = window.matchMedia('(prefers-color-scheme: dark)');
+          const listener = (event) => {
+            if (!safeStorageGet('wps-theme')) {
+              theme = event.matches ? 'dark' : 'light';
+              applyTheme(theme);
+            }
+          };
+          if (typeof systemThemeMedia.addEventListener === 'function') {
+            systemThemeMedia.addEventListener('change', listener);
+            removeThemeListener = () => systemThemeMedia.removeEventListener('change', listener);
+          } else {
+            systemThemeMedia.addListener(listener);
+            removeThemeListener = () => systemThemeMedia.removeListener(listener);
+          }
+        }
+
+        const savedLanguage = safeStorageGet('wps-language');
+        const detectedLanguage = window.navigator.language?.toLowerCase().startsWith('ar') ? 'ar' : 'en';
+        language = savedLanguage === 'ar' || savedLanguage === 'en' ? savedLanguage : detectedLanguage;
+        applyLanguage(language);
+      } catch {
+        theme = detectSystemTheme();
+        language = 'en';
+        applyTheme(theme);
+        applyLanguage(language);
+      }
+    } else {
+      applyTheme('light');
+      applyLanguage('en');
+    }
+
+    return () => {
+      removeThemeListener();
+    };
+  });
 </script>
 
 <svelte:head>
-  <title>Oman WPS (SIF) Excel Generator</title>
+  <title>{t.appTitle}</title>
 </svelte:head>
 
-<main class="mx-auto max-w-[1600px] px-4 pb-10 pt-6 md:px-6">
-  <div class="mb-3 flex items-center justify-between gap-3">
-    <h1 class="text-4xl font-extrabold tracking-tight text-[#dbe5f6] md:text-5xl">Oman WPS (SIF) Excel Generator</h1>
+<main class="mx-auto max-w-[1920px] px-4 pb-10 pt-6 md:px-6">
+  <div class="mb-3 flex items-center justify-between gap-3 flex-wrap">
+    <h1 class="text-4xl font-extrabold tracking-tight text-[#dbe5f6] md:text-5xl">{t.appTitle}</h1>
+    <div class="flex items-center gap-2">
+      <button
+        class="h-9 rounded-md border border-[#2d3b57] bg-[#172239] px-3 text-sm font-medium text-[#dbe5f6] hover:bg-[#1f2f4a]"
+        onclick={toggleTheme}
+        type="button"
+      >
+        {t.themeToggle}
+      </button>
+      <button
+        class="h-9 rounded-md border border-[#2d3b57] bg-[#172239] px-3 text-sm font-medium text-[#dbe5f6] hover:bg-[#1f2f4a]"
+        onclick={toggleLanguage}
+        type="button"
+      >
+        {t.languageToggle}
+      </button>
+    </div>
     {#if showSeedButton}
       <button
         class="h-9 rounded-md border border-[#2d3b57] bg-[#172239] px-3 text-sm font-medium text-[#dbe5f6] hover:bg-[#1f2f4a]"
@@ -290,6 +417,8 @@
     {loadingBanks}
     {banksError}
     bind:form
+    labels={t.labels}
+    sectionTitle={t.sections.employerPayer}
   />
 
   <EmployeesTable
@@ -300,6 +429,10 @@
     {banksError}
     {seededEmployeeDraft}
     {seedEmployeeRequestId}
+    labels={t.labels}
+    sectionTitles={t.sections}
+    tipText={t.tip}
+    buttonLabels={t.buttons}
   />
 
   <GeneratePanel
@@ -309,5 +442,7 @@
     {status}
     {error}
     {previewInfo}
+    labels={t.labels}
+    buttonLabels={t.buttons}
   />
 </main>

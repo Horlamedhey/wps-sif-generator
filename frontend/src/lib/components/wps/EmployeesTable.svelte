@@ -21,6 +21,11 @@
   export let banksError = '';
   export let seededEmployeeDraft = null;
   export let seedEmployeeRequestId = 0;
+  export let labels = {};
+  export let sectionTitles = {};
+  export let buttonLabels = {};
+  export let tipText =
+    'Tip: Add a row through the form, then you can still edit directly in the table. Net Salary is auto-calculated as Basic Salary + Extra Income - Deductions - Social Security Deductions.';
 
   const previewMetaHeader = [
     'Employer CR-NO',
@@ -397,10 +402,9 @@
 
 </script>
 
-<h2 class="mt-5 text-3xl font-bold tracking-tight text-[#dbe5f6] md:text-4xl">Employees</h2>
-<p class="mb-2 text-xs text-[#96a5bf]">
-  Tip: Add a row through the form, then you can still edit directly in the table. Net Salary is auto-calculated as
-  Basic Salary + Extra Income - Deductions - Social Security Deductions.
+<h2 class="mt-5 text-3xl font-bold tracking-tight text-[#dbe5f6] md:text-4xl">{sectionTitles.employees || 'Employees'}</h2>
+<p class="mb-2 text-sm font-medium text-[#96a5bf]">
+  {tipText}
 </p>
 
 <div class="mb-3 flex justify-end">
@@ -411,19 +415,19 @@
       type="button"
       variant="outline"
     >
-      Add Row
+      {buttonLabels.addRow || 'Add Row'}
     </Button>
   {/if}
 </div>
 
 {#if showAddForm}
-  <Card class="mb-4 rounded-[10px] border border-[#243247] bg-[linear-gradient(180deg,rgba(17,24,39,0.98),rgba(9,16,30,0.96))] p-3 shadow-none gap-3">
-    <h3 class="text-sm font-semibold text-[#dbe5f6]">New Employee</h3>
+  <Card class="wps-panel mb-4 rounded-[10px] border border-[#243247] p-3 shadow-none gap-3">
+    <h3 class="text-sm font-semibold text-[#dbe5f6]">{sectionTitles.newEmployee || 'New Employee'}</h3>
 
     <div class="grid grid-cols-1 gap-3 xl:grid-cols-3">
       <div class="space-y-3">
         <div class="space-y-1.5">
-          <Label class="text-xs font-medium text-[#96a5bf]" for="new-employee-id-type">Employee ID Type</Label>
+          <Label class="text-xs font-medium text-[#96a5bf]" for="new-employee-id-type">{labels.employeeIdType || 'Employee ID Type'}</Label>
           <Select.Root type="single" value={draftEmployee.employee_id_type} onValueChange={(value) => updateDraftField('employee_id_type', value || 'C')}>
             <Select.Trigger class={selectTriggerClass} id="new-employee-id-type">
               {draftEmployee.employee_id_type === 'P' ? 'Passport (P)' : 'Civil ID (C)'}
@@ -436,7 +440,7 @@
         </div>
 
         <div class="space-y-1.5">
-          <Label class="text-xs font-medium text-[#96a5bf]" for="new-employee-id">Employee ID</Label>
+          <Label class="text-xs font-medium text-[#96a5bf]" for="new-employee-id">{labels.employeeId || 'Employee ID'}</Label>
           <Input
             id="new-employee-id"
             class={inputClass}
@@ -450,7 +454,7 @@
         </div>
 
         <div class="space-y-1.5">
-          <Label class="text-xs font-medium text-[#96a5bf]" for="new-reference-number">Reference Number</Label>
+          <Label class="text-xs font-medium text-[#96a5bf]" for="new-reference-number">{labels.referenceNumber || 'Reference Number'}</Label>
           <Input
             id="new-reference-number"
             class={inputClass}
@@ -462,7 +466,7 @@
         </div>
 
         <div class="space-y-1.5">
-          <Label class="text-xs font-medium text-[#96a5bf]" for="new-employee-name">Employee Name</Label>
+          <Label class="text-xs font-medium text-[#96a5bf]" for="new-employee-name">{labels.employeeName || 'Employee Name'}</Label>
           <Input
             id="new-employee-name"
             class={inputClass}
@@ -475,7 +479,7 @@
         </div>
 
         <div class="space-y-1.5">
-          <Label class="text-xs font-medium text-[#96a5bf]" for="new-employee-bic">Employee Bank Identification Code</Label>
+          <Label class="text-xs font-medium text-[#96a5bf]" for="new-employee-bic">{labels.employeeBic || 'Employee Bank Identification Code'}</Label>
           {#if loadingBanks || banksError || banks.length === 0}
             <Input
               id="new-employee-bic"
@@ -507,7 +511,7 @@
 
       <div class="space-y-3">
         <div class="space-y-1.5">
-          <Label class="text-xs font-medium text-[#96a5bf]" for="new-employee-account">Employee Account Number</Label>
+          <Label class="text-xs font-medium text-[#96a5bf]" for="new-employee-account">{labels.employeeAccount || 'Employee Account Number'}</Label>
           <Input
             id="new-employee-account"
             class={inputClass}
@@ -521,7 +525,7 @@
         </div>
 
         <div class="space-y-1.5">
-          <Label class="text-xs font-medium text-[#96a5bf]" for="new-salary-frequency">Salary Frequency</Label>
+          <Label class="text-xs font-medium text-[#96a5bf]" for="new-salary-frequency">{labels.salaryFrequency || 'Salary Frequency'}</Label>
           <Select.Root type="single" value={draftEmployee.salary_frequency} onValueChange={(value) => updateDraftField('salary_frequency', value || 'M')}>
             <Select.Trigger class={selectTriggerClass} id="new-salary-frequency">
               {draftEmployee.salary_frequency === 'B' ? 'Bi-weekly (B)' : 'Monthly (M)'}
@@ -534,7 +538,7 @@
         </div>
 
         <div class="space-y-1.5">
-          <Label class="text-xs font-medium text-[#96a5bf]" for="new-working-days">Number of Working Days</Label>
+          <Label class="text-xs font-medium text-[#96a5bf]" for="new-working-days">{labels.workingDays || 'Number of Working Days'}</Label>
           <Input
             id="new-working-days"
             class={inputClass}
@@ -549,7 +553,7 @@
         </div>
 
         <div class="space-y-1.5">
-          <Label class="text-xs font-medium text-[#96a5bf]" for="new-net-salary">Net Salary (Auto-calculated)</Label>
+          <Label class="text-xs font-medium text-[#96a5bf]" for="new-net-salary">{labels.netSalaryAuto || 'Net Salary (Auto-calculated)'}</Label>
           <Input
             id="new-net-salary"
             class={inputClass}
@@ -560,7 +564,7 @@
         </div>
 
         <div class="space-y-1.5">
-          <Label class="text-xs font-medium text-[#96a5bf]" for="new-basic-salary">Basic Salary</Label>
+          <Label class="text-xs font-medium text-[#96a5bf]" for="new-basic-salary">{labels.basicSalary || 'Basic Salary'}</Label>
           <Input
             id="new-basic-salary"
             class={inputClass}
@@ -574,7 +578,7 @@
 
       <div class="space-y-3">
         <div class="space-y-1.5">
-          <Label class="text-xs font-medium text-[#96a5bf]" for="new-extra-hours">Extra Hours</Label>
+          <Label class="text-xs font-medium text-[#96a5bf]" for="new-extra-hours">{labels.extraHours || 'Extra Hours'}</Label>
           <Input
             id="new-extra-hours"
             class={inputClass}
@@ -586,7 +590,7 @@
         </div>
 
         <div class="space-y-1.5">
-          <Label class="text-xs font-medium text-[#96a5bf]" for="new-extra-income">Extra Income</Label>
+          <Label class="text-xs font-medium text-[#96a5bf]" for="new-extra-income">{labels.extraIncome || 'Extra Income'}</Label>
           <Input
             id="new-extra-income"
             class={inputClass}
@@ -598,7 +602,7 @@
         </div>
 
         <div class="space-y-1.5">
-          <Label class="text-xs font-medium text-[#96a5bf]" for="new-deductions">Deductions</Label>
+          <Label class="text-xs font-medium text-[#96a5bf]" for="new-deductions">{labels.deductions || 'Deductions'}</Label>
           <Input
             id="new-deductions"
             class={inputClass}
@@ -610,7 +614,7 @@
         </div>
 
         <div class="space-y-1.5">
-          <Label class="text-xs font-medium text-[#96a5bf]" for="new-social-security">Social Security Deductions</Label>
+          <Label class="text-xs font-medium text-[#96a5bf]" for="new-social-security">{labels.socialSecurityDeductions || 'Social Security Deductions'}</Label>
           <Input
             id="new-social-security"
             class={inputClass}
@@ -622,7 +626,7 @@
         </div>
 
         <div class="space-y-1.5">
-          <Label class="text-xs font-medium text-[#96a5bf]" for="new-notes">Notes / Comments</Label>
+          <Label class="text-xs font-medium text-[#96a5bf]" for="new-notes">{labels.notesComments || 'Notes / Comments'}</Label>
           <textarea
             id="new-notes"
             class={`${inputClass} min-h-[76px] p-3 leading-5`}
@@ -645,21 +649,21 @@
         type="button"
         variant="outline"
       >
-        Cancel
+        {buttonLabels.cancel || 'Cancel'}
       </Button>
       <Button
         class="h-9 rounded-md border border-[#2f5cab] bg-[linear-gradient(180deg,#2756a3,#1b3f7a)] px-4 font-semibold text-white hover:brightness-110"
         onclick={addDraftEmployee}
         type="button"
       >
-        Add
+        {buttonLabels.add || 'Add'}
       </Button>
     </div>
   </Card>
 {/if}
 
-<h3 class="mt-4 mb-2 text-sm font-semibold text-[#dbe5f6]">Full SIF Preview (Worksheet Layout)</h3>
-<Card class="overflow-hidden rounded-[10px] border border-[#243247] bg-[linear-gradient(180deg,rgba(17,24,39,0.98),rgba(9,16,30,0.96))] p-0 shadow-none gap-0">
+<h3 class="mt-4 mb-2 text-sm font-semibold text-[#dbe5f6]">{sectionTitles.preview || 'Full SIF Preview (Worksheet Layout)'}</h3>
+<Card class="wps-panel overflow-hidden rounded-[10px] border border-[#243247] p-0 shadow-none gap-0">
   <div class="overflow-x-auto stylish-scrollbar">
     <table class="min-w-[1550px] w-full border-collapse">
       <tbody>

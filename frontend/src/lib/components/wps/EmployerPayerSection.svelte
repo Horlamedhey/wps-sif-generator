@@ -12,6 +12,8 @@
   export let banks = [];
   export let loadingBanks = false;
   export let banksError = '';
+  export let labels = {};
+  export let sectionTitle = 'Employer / Payer Details';
   const currentYear = new Date().getFullYear();
 
   export let form = {
@@ -151,13 +153,13 @@
   }
 </script>
 
-<Card class="rounded-[10px] border border-[#243247] bg-[linear-gradient(180deg,rgba(17,24,39,0.98),rgba(9,16,30,0.96))] p-3 shadow-none gap-3">
-  <h3 class="mb-3 text-sm font-semibold text-[#dbe5f6]">Employer / Payer Details</h3>
+<Card class="wps-panel rounded-[10px] border border-[#243247] p-3 shadow-none gap-3">
+  <h3 class="mb-3 text-sm font-semibold text-[#dbe5f6]">{sectionTitle}</h3>
 
   <div class="grid grid-cols-1 gap-3 xl:grid-cols-3">
     <div class="space-y-3">
       <div class="space-y-1.5">
-        <Label class={labelClass} for="employer-cr">Employer CR-NO</Label>
+        <Label class={labelClass} for="employer-cr">{labels.employerCr || 'Employer CR-NO'}</Label>
         <Input
           id="employer-cr"
           class={inputClass}
@@ -177,18 +179,18 @@
             checked={form.sameAsEmployer}
             onCheckedChange={(checked) => updateField('sameAsEmployer', checked === true)}
           />
-          <Label class="text-xs font-medium text-[#96a5bf]" for="same-employer">Same as Employer CR-NO</Label>
+          <Label class="text-xs font-medium text-[#96a5bf]" for="same-employer">{labels.sameAsEmployer || 'Same as Employer CR-NO'}</Label>
         </div>
 
         <div class="space-y-1.5">
-          <Label class={labelClass} for="payer-cr">Payer CR-NO</Label>
+          <Label class={labelClass} for="payer-cr">{labels.payerCr || 'Payer CR-NO'}</Label>
           <Input
             id="payer-cr"
             class={inputClass}
+            disabled={form.sameAsEmployer}
             inputmode="numeric"
             oninput={(event) => handleDigitInput('payerCr', event, 32)}
             pattern="[0-9]*"
-            readonly={form.sameAsEmployer}
             type="text"
             value={form.payerCr}
           />
@@ -196,7 +198,7 @@
       </div>
 
       <div class="space-y-1.5">
-        <Label class={labelClass} for="payer-account">Payer Account Number</Label>
+        <Label class={labelClass} for="payer-account">{labels.payerAccount || 'Payer Account Number'}</Label>
         <Input
           id="payer-account"
           class={inputClass}
@@ -212,7 +214,7 @@
 
     <div class="space-y-3">
       <div class="space-y-1.5">
-        <Label class={labelClass} for="employer-bank">Employer Bank</Label>
+        <Label class={labelClass} for="employer-bank">{labels.employerBank || 'Employer Bank'}</Label>
 
         {#if loadingBanks || banksError || banks.length === 0}
           <Input
@@ -239,7 +241,7 @@
       </div>
 
       <div class="space-y-1.5">
-        <Label class={labelClass} for="salary-year">Salary Year (YYYY)</Label>
+        <Label class={labelClass} for="salary-year">{labels.salaryYear || 'Salary Year (YYYY)'}</Label>
         <Input
           id="salary-year"
           class={inputClass}
@@ -253,7 +255,7 @@
       </div>
 
       <div class="space-y-1.5">
-        <Label class={labelClass} for="salary-month">Salary Month (MM)</Label>
+        <Label class={labelClass} for="salary-month">{labels.salaryMonth || 'Salary Month (MM)'}</Label>
         <Select.Root type="single" value={String(form.salaryMonth)} onValueChange={handleMonthChange}>
           <Select.Trigger class={selectTriggerClass} id="salary-month">
             {selectedMonthLabel}
@@ -271,7 +273,7 @@
 
     <div class="space-y-3">
       <div class="space-y-1.5">
-        <Label class={labelClass} for="payment-type">Payment Type</Label>
+        <Label class={labelClass} for="payment-type">{labels.paymentType || 'Payment Type'}</Label>
         <Input
           id="payment-type"
           class={inputClass}
@@ -282,7 +284,7 @@
       </div>
 
       <div class="space-y-1.5">
-        <Label class={labelClass} for="processing-date">Processing date (used for file name)</Label>
+        <Label class={labelClass} for="processing-date">{labels.processingDate || 'Processing date (used for file name)'}</Label>
 
         <Popover.Root bind:open={processingDateOpen}>
           <Popover.Trigger class={dateTriggerClass} id="processing-date">
@@ -305,7 +307,7 @@
       </div>
 
       <div class="space-y-1.5">
-        <Label class={labelClass} for="sequence">File sequence number</Label>
+        <Label class={labelClass} for="sequence">{labels.sequence || 'File sequence number'}</Label>
         <Input
           id="sequence"
           class={inputClass}

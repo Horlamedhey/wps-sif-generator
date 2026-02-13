@@ -11,6 +11,8 @@
   export let status = '';
   export let error = '';
   export let previewInfo = null;
+  export let labels = {};
+  export let buttonLabels = {};
 
   const inputClass =
     'h-10 rounded-md border border-[#2a3853] bg-[#1b2436] text-[#dbe5f6] placeholder:text-[#7887a3] focus-visible:ring-2 focus-visible:ring-[#4a8cff]/50 focus-visible:border-[#4a8cff]';
@@ -55,11 +57,11 @@
     onclick={generateFile}
     type="button"
   >
-    {generating ? 'Generating...' : 'Generate .xlsx'}
+    {generating ? buttonLabels.generating || 'Generating...' : buttonLabels.generate || 'Generate .xlsx'}
   </Button>
 
   <div class="space-y-1.5">
-    <Label class="text-xs font-medium text-[#96a5bf]" for="sheet-name">Sheet name</Label>
+    <Label class="text-xs font-medium text-[#96a5bf]" for="sheet-name">{labels.sheetName || 'Sheet name'}</Label>
     <Input id="sheet-name" class={inputClass} bind:value={sheetName} type="text" />
   </div>
 </section>
