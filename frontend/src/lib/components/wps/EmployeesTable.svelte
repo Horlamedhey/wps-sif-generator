@@ -2,7 +2,7 @@
   import { Card } from '$lib/components/ui/card';
   import { Input } from '$lib/components/ui/input';
   import { Button } from '$lib/components/ui/button';
-  import { employeeHeaders } from '$lib/wps/employee';
+  import { employeeHeaders, employeeFieldKeys } from '$lib/wps/employee';
 
   export let employees = [];
   export let addRow = () => {};
@@ -10,6 +10,15 @@
 
   const cellInputClass =
     'h-9 rounded-none border-0 bg-transparent px-2 text-[13px] text-[#dbe5f6] focus-visible:ring-0 focus-visible:border-0';
+  const thClass =
+    'border border-[#1f2b40] bg-[#0f1727] px-2 py-2 text-left text-[11px] font-semibold text-[#aebcce] whitespace-nowrap';
+  const tdClass = 'border border-[#1f2b40]';
+
+  function updateEmployeeField(rowIndex, field, value) {
+    const next = [...employees];
+    next[rowIndex] = { ...next[rowIndex], [field]: value };
+    employees = next;
+  }
 </script>
 
 <h2 class="mt-5 text-3xl font-bold tracking-tight text-[#dbe5f6] md:text-4xl">Employees</h2>
@@ -23,31 +32,23 @@
       <thead>
         <tr>
           {#each employeeHeaders as header}
-            <th class="border border-[#1f2b40] bg-[#0f1727] px-2 py-2 text-left text-[11px] font-semibold text-[#aebcce] whitespace-nowrap">
-              {header}
-            </th>
+            <th class={thClass}>{header}</th>
           {/each}
-          <th class="border border-[#1f2b40] bg-[#0f1727] px-2 py-2"></th>
+          <th class={thClass}></th>
         </tr>
       </thead>
       <tbody>
         {#each employees as employee, idx (idx)}
           <tr>
-            <td class="border border-[#1f2b40]"><Input class={cellInputClass} bind:value={employee.employee_id_type} /></td>
-            <td class="border border-[#1f2b40]"><Input class={cellInputClass} bind:value={employee.employee_id} /></td>
-            <td class="border border-[#1f2b40]"><Input class={cellInputClass} bind:value={employee.reference_number} /></td>
-            <td class="border border-[#1f2b40]"><Input class={cellInputClass} bind:value={employee.employee_name} /></td>
-            <td class="border border-[#1f2b40]"><Input class={cellInputClass} bind:value={employee.employee_bic_code} /></td>
-            <td class="border border-[#1f2b40]"><Input class={cellInputClass} bind:value={employee.employee_account} /></td>
-            <td class="border border-[#1f2b40]"><Input class={cellInputClass} bind:value={employee.salary_frequency} /></td>
-            <td class="border border-[#1f2b40]"><Input class={cellInputClass} bind:value={employee.number_of_working_days} /></td>
-            <td class="border border-[#1f2b40]"><Input class={cellInputClass} bind:value={employee.net_salary} /></td>
-            <td class="border border-[#1f2b40]"><Input class={cellInputClass} bind:value={employee.basic_salary} /></td>
-            <td class="border border-[#1f2b40]"><Input class={cellInputClass} bind:value={employee.extra_hours} /></td>
-            <td class="border border-[#1f2b40]"><Input class={cellInputClass} bind:value={employee.extra_income} /></td>
-            <td class="border border-[#1f2b40]"><Input class={cellInputClass} bind:value={employee.deductions} /></td>
-            <td class="border border-[#1f2b40]"><Input class={cellInputClass} bind:value={employee.social_security_deductions} /></td>
-            <td class="border border-[#1f2b40]"><Input class={cellInputClass} bind:value={employee.notes_comments} /></td>
+            {#each employeeFieldKeys as field}
+              <td class={tdClass}>
+                <Input
+                  class={cellInputClass}
+                  oninput={(event) => updateEmployeeField(idx, field, event.currentTarget.value)}
+                  value={employee[field]}
+                />
+              </td>
+            {/each}
             <td class="border border-[#1f2b40] px-2 py-1 text-center">
               <Button
                 class="h-8 w-8 rounded-md border border-[#5a2a3a] bg-[#2b1822] px-0 text-[#f4a9bd] hover:bg-[#3a1f2d]"

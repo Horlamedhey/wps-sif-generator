@@ -1,20 +1,23 @@
-export const employeeHeaders = [
-  'Employee ID Type',
-  'Employee ID',
-  'Reference Number',
-  'Employee Name',
-  'Employee BIC Code',
-  'Employee Account',
-  'Salary Frequency',
-  'Number Of Working days',
-  'Net Salary',
-  'Basic Salary',
-  'Extra Hours',
-  'Extra Income',
-  'Deductions',
-  'Social Security Deductions',
-  'Notes / Comments'
+export const employeeColumns = [
+  { key: 'employee_id_type', label: 'Employee ID Type' },
+  { key: 'employee_id', label: 'Employee ID' },
+  { key: 'reference_number', label: 'Reference Number' },
+  { key: 'employee_name', label: 'Employee Name' },
+  { key: 'employee_bic_code', label: 'Employee BIC Code' },
+  { key: 'employee_account', label: 'Employee Account' },
+  { key: 'salary_frequency', label: 'Salary Frequency' },
+  { key: 'number_of_working_days', label: 'Number Of Working days' },
+  { key: 'net_salary', label: 'Net Salary' },
+  { key: 'basic_salary', label: 'Basic Salary' },
+  { key: 'extra_hours', label: 'Extra Hours' },
+  { key: 'extra_income', label: 'Extra Income' },
+  { key: 'deductions', label: 'Deductions' },
+  { key: 'social_security_deductions', label: 'Social Security Deductions' },
+  { key: 'notes_comments', label: 'Notes / Comments' }
 ];
+
+export const employeeHeaders = employeeColumns.map((column) => column.label);
+export const employeeFieldKeys = employeeColumns.map((column) => column.key);
 
 export function createEmployee() {
   return {

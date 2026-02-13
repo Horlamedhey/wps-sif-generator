@@ -14,6 +14,36 @@
 
   const inputClass =
     'h-10 rounded-md border border-[#2a3853] bg-[#1b2436] text-[#dbe5f6] placeholder:text-[#7887a3] focus-visible:ring-2 focus-visible:ring-[#4a8cff]/50 focus-visible:border-[#4a8cff]';
+
+  let alerts = [];
+
+  $: alerts = [
+    status
+      ? {
+          key: 'status',
+          title: 'Success',
+          description: status,
+          className: 'border-[#2e5743] bg-[#10291f] text-[#7fd9a7]'
+        }
+      : null,
+    error
+      ? {
+          key: 'error',
+          title: 'Error',
+          description: error,
+          className: 'border-[#5a2a3a] bg-[#2b1822] text-[#ff9ba9]',
+          variant: 'destructive'
+        }
+      : null,
+    previewInfo
+      ? {
+          key: 'preview',
+          title: 'Preview',
+          description: `${previewInfo.number_of_records} records, total ${previewInfo.total_salaries}, file ${previewInfo.filename}`,
+          className: 'border-[#2a3853] bg-[#121a2a] text-[#9bb0cc]'
+        }
+      : null
+  ].filter(Boolean);
 </script>
 
 <Separator class="my-4 bg-[#243247]" />
@@ -34,25 +64,9 @@
   </div>
 </section>
 
-{#if status}
-  <Alert class="mt-3 border-[#2e5743] bg-[#10291f] text-[#7fd9a7]">
-    <AlertTitle>Success</AlertTitle>
-    <AlertDescription>{status}</AlertDescription>
+{#each alerts as alert (alert.key)}
+  <Alert class={`mt-3 ${alert.className}`} variant={alert.variant}>
+    <AlertTitle>{alert.title}</AlertTitle>
+    <AlertDescription>{alert.description}</AlertDescription>
   </Alert>
-{/if}
-
-{#if error}
-  <Alert class="mt-3 border-[#5a2a3a] bg-[#2b1822] text-[#ff9ba9]" variant="destructive">
-    <AlertTitle>Error</AlertTitle>
-    <AlertDescription>{error}</AlertDescription>
-  </Alert>
-{/if}
-
-{#if previewInfo}
-  <Alert class="mt-3 border-[#2a3853] bg-[#121a2a] text-[#9bb0cc]">
-    <AlertTitle>Preview</AlertTitle>
-    <AlertDescription>
-      {previewInfo.number_of_records} records, total {previewInfo.total_salaries}, file {previewInfo.filename}
-    </AlertDescription>
-  </Alert>
-{/if}
+{/each}

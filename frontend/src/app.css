@@ -61,4 +61,15 @@
     font-family: "Segoe UI", "SF Pro Text", "Helvetica Neue", sans-serif;
     background-image: radial-gradient(circle at top, #0d1630 0%, #050a17 40%);
   }
+
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  input[type="number"] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+  }
 }
