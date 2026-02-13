@@ -1,27 +1,64 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
 :root {
-  --bg: #050a17;
-  --panel: #0b1222;
-  --panel-2: #111827;
-  --line: #243247;
-  --text: #dbe5f6;
-  --text-muted: #96a5bf;
-  --accent: #4a8cff;
+  --radius: 0.625rem;
+  --background: #050a17;
+  --foreground: #dbe5f6;
+  --card: #0b1222;
+  --card-foreground: #dbe5f6;
+  --popover: #0b1222;
+  --popover-foreground: #dbe5f6;
+  --primary: #2f5cab;
+  --primary-foreground: #f2f6ff;
+  --secondary: #1b2436;
+  --secondary-foreground: #dbe5f6;
+  --muted: #121a2a;
+  --muted-foreground: #96a5bf;
+  --accent: #1f2f4a;
+  --accent-foreground: #dbe5f6;
+  --destructive: #8f2e45;
+  --border: #243247;
+  --input: #2a3853;
+  --ring: #4a8cff;
 }
 
-* {
-  box-sizing: border-box;
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
 }
 
-body {
-  margin: 0;
-  font-family: "Segoe UI", "SF Pro Text", "Helvetica Neue", sans-serif;
-  background: radial-gradient(circle at top, #0d1630 0%, var(--bg) 40%);
-  color: var(--text);
-}
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
 
-input,
-select,
-button,
-textarea {
-  font: inherit;
+  body {
+    @apply bg-background text-foreground antialiased;
+    margin: 0;
+    min-height: 100vh;
+    font-family: "Segoe UI", "SF Pro Text", "Helvetica Neue", sans-serif;
+    background-image: radial-gradient(circle at top, #0d1630 0%, #050a17 40%);
+  }
 }
