@@ -51,6 +51,13 @@
   const cellSelectTriggerClass =
     'h-9 w-full rounded-none border-0 bg-transparent px-2 text-[13px] font-normal text-[#dbe5f6] shadow-none justify-between focus-visible:ring-0 focus-visible:border-0';
   const previewCellClass = 'border border-[#1f2b40] px-2 py-2 text-[12px] whitespace-nowrap';
+  const decimalFieldScale = {
+    basic_salary: 3,
+    extra_hours: 2,
+    extra_income: 3,
+    deductions: 3,
+    social_security_deductions: 3
+  };
 
   let showAddForm = false;
   let addFormError = '';
@@ -111,7 +118,7 @@
     showAddForm = true;
     addFormError = '';
     const mergedDraft = { ...createEmployee(), ...nextDraft };
-    draftEmployee = withCalculatedNetSalary(applyBankFallback(mergedDraft));
+    draftEmployee = withCalculatedNetSalary(sanitizeEmployeeEntry(applyBankFallback(mergedDraft)));
   }
 
   function applyBankFallback(employee) {
@@ -132,12 +139,16 @@
   }
 
   function updateDraftField(field, value) {
-    draftEmployee = withCalculatedNetSalary({ ...draftEmployee, [field]: value });
+    const next = sanitizeEmployeeEntry({ ...draftEmployee, [field]: normalizeSelectValue(value) });
+    draftEmployee = withCalculatedNetSalary(next);
   }
 
   function updateEmployeeField(rowIndex, field, value) {
     const next = [...employees];
-    next[rowIndex] = withCalculatedNetSalary({ ...next[rowIndex], [field]: value });
+    const current = next[rowIndex] || createEmployee();
+    next[rowIndex] = withCalculatedNetSalary(
+      sanitizeEmployeeEntry({ ...current, [field]: normalizeSelectValue(value) })
+    );
     employees = next;
   }
 
@@ -165,10 +176,6 @@
       return typeof extracted === 'string' ? extracted : String(extracted || '');
     }
     return '';
-  }
-
-  function normalizeIntegerInput(value, maxDigits = 3) {
-    return value.replace(/\D/g, '').slice(0, maxDigits);
   }
 
   function isBlank(value) {
@@ -229,6 +236,71 @@
     };
   }
 
+  function sanitizeDigits(value, maxLen) {
+    const digits = String(value ?? '').replace(/\D/g, '');
+    return typeof maxLen === 'number' ? digits.slice(0, maxLen) : digits;
+  }
+
+  function sanitizeLettersNoDigits(value, maxLen) {
+    const text = String(value ?? '').replace(/\d/g, '');
+    return typeof maxLen === 'number' ? text.slice(0, maxLen) : text;
+  }
+
+  function sanitizeAlphanumeric(value, maxLen) {
+    const text = String(value ?? '').replace(/[^A-Za-z0-9]/g, '');
+    return typeof maxLen === 'number' ? text.slice(0, maxLen) : text;
+  }
+
+  function sanitizeDecimal(value, scale) {
+    const text = String(value ?? '');
+    if (text === '') {
+      return '';
+    }
+
+    let normalized = text.replace(/[^\d.]/g, '');
+    if (normalized.startsWith('.')) {
+      normalized = `0${normalized}`;
+    }
+
+    const dotIndex = normalized.indexOf('.');
+    if (dotIndex === -1) {
+      return normalized;
+    }
+
+    const integerPart = normalized.slice(0, dotIndex);
+    const decimalPart = normalized.slice(dotIndex + 1).replace(/\./g, '').slice(0, scale);
+    return `${integerPart}.${decimalPart}`;
+  }
+
+  function sanitizeEmployeeEntry(employee) {
+    const idType = normalizeSelectValue(employee.employee_id_type) === 'P' ? 'P' : 'C';
+    const salaryFrequency = normalizeSelectValue(employee.salary_frequency) === 'B' ? 'B' : 'M';
+
+    return {
+      ...employee,
+      employee_id_type: idType,
+      employee_id:
+        idType === 'C'
+          ? sanitizeDigits(employee.employee_id, 17)
+          : sanitizeAlphanumeric(employee.employee_id, 17).toUpperCase(),
+      reference_number: String(employee.reference_number ?? '').slice(0, 64),
+      employee_name: sanitizeLettersNoDigits(employee.employee_name, 70),
+      employee_bic_code: normalizeSelectValue(employee.employee_bic_code).toUpperCase().slice(0, 11),
+      employee_account: sanitizeDigits(employee.employee_account, 30),
+      salary_frequency: salaryFrequency,
+      number_of_working_days: sanitizeDigits(employee.number_of_working_days, 3),
+      basic_salary: sanitizeDecimal(employee.basic_salary, decimalFieldScale.basic_salary),
+      extra_hours: sanitizeDecimal(employee.extra_hours, decimalFieldScale.extra_hours),
+      extra_income: sanitizeDecimal(employee.extra_income, decimalFieldScale.extra_income),
+      deductions: sanitizeDecimal(employee.deductions, decimalFieldScale.deductions),
+      social_security_deductions: sanitizeDecimal(
+        employee.social_security_deductions,
+        decimalFieldScale.social_security_deductions
+      ),
+      notes_comments: String(employee.notes_comments ?? '').slice(0, 300)
+    };
+  }
+
   function validateDraftEmployee() {
     const missing = [];
     if (!['C', 'P'].includes(draftEmployee.employee_id_type)) missing.push('Employee ID Type');
@@ -271,6 +343,39 @@
 
   function isPreviewSelectField(field) {
     return field === 'employee_id_type' || field === 'employee_bic_code' || field === 'salary_frequency';
+  }
+
+  function getCellInputMode(field, rowIndex) {
+    if (field === 'employee_id') {
+      return getPreviewSelectValue(rowIndex, 'employee_id_type') === 'C' ? 'numeric' : 'text';
+    }
+    if (field === 'employee_account' || field === 'number_of_working_days') {
+      return 'numeric';
+    }
+    if (field in decimalFieldScale) {
+      return 'decimal';
+    }
+    return 'text';
+  }
+
+  function getCellMaxLength(field) {
+    if (field === 'employee_id') return 17;
+    if (field === 'reference_number') return 64;
+    if (field === 'employee_name') return 70;
+    if (field === 'employee_account') return 30;
+    if (field === 'number_of_working_days') return 3;
+    if (field === 'notes_comments') return 300;
+    return undefined;
+  }
+
+  function getCellPattern(field, rowIndex) {
+    if (field === 'employee_id') {
+      return getPreviewSelectValue(rowIndex, 'employee_id_type') === 'C' ? '[0-9]*' : undefined;
+    }
+    if (field === 'employee_account' || field === 'number_of_working_days') {
+      return '[0-9]*';
+    }
+    return undefined;
   }
 
   function getPreviewSelectValue(rowIndex, field) {
@@ -335,8 +440,10 @@
           <Input
             id="new-employee-id"
             class={inputClass}
+            inputmode={draftEmployee.employee_id_type === 'C' ? 'numeric' : 'text'}
             maxlength="17"
             oninput={(event) => updateDraftField('employee_id', event.currentTarget.value)}
+            pattern={draftEmployee.employee_id_type === 'C' ? '[0-9]*' : undefined}
             type="text"
             value={draftEmployee.employee_id}
           />
@@ -359,6 +466,7 @@
           <Input
             id="new-employee-name"
             class={inputClass}
+            inputmode="text"
             maxlength="70"
             oninput={(event) => updateDraftField('employee_name', event.currentTarget.value)}
             type="text"
@@ -403,8 +511,10 @@
           <Input
             id="new-employee-account"
             class={inputClass}
+            inputmode="numeric"
             maxlength="30"
             oninput={(event) => updateDraftField('employee_account', event.currentTarget.value)}
+            pattern="[0-9]*"
             type="text"
             value={draftEmployee.employee_account}
           />
@@ -429,8 +539,10 @@
             id="new-working-days"
             class={inputClass}
             inputmode="numeric"
-            oninput={(event) => updateDraftField('number_of_working_days', normalizeIntegerInput(event.currentTarget.value, 3))}
+            maxlength="3"
+            oninput={(event) => updateDraftField('number_of_working_days', event.currentTarget.value)}
             placeholder="0-999"
+            pattern="[0-9]*"
             type="text"
             value={draftEmployee.number_of_working_days}
           />
@@ -452,9 +564,9 @@
           <Input
             id="new-basic-salary"
             class={inputClass}
+            inputmode="decimal"
             oninput={(event) => updateDraftField('basic_salary', event.currentTarget.value)}
-            step="0.001"
-            type="number"
+            type="text"
             value={draftEmployee.basic_salary}
           />
         </div>
@@ -466,9 +578,9 @@
           <Input
             id="new-extra-hours"
             class={inputClass}
+            inputmode="decimal"
             oninput={(event) => updateDraftField('extra_hours', event.currentTarget.value)}
-            step="0.01"
-            type="number"
+            type="text"
             value={draftEmployee.extra_hours}
           />
         </div>
@@ -478,9 +590,9 @@
           <Input
             id="new-extra-income"
             class={inputClass}
+            inputmode="decimal"
             oninput={(event) => updateDraftField('extra_income', event.currentTarget.value)}
-            step="0.001"
-            type="number"
+            type="text"
             value={draftEmployee.extra_income}
           />
         </div>
@@ -490,9 +602,9 @@
           <Input
             id="new-deductions"
             class={inputClass}
+            inputmode="decimal"
             oninput={(event) => updateDraftField('deductions', event.currentTarget.value)}
-            step="0.001"
-            type="number"
+            type="text"
             value={draftEmployee.deductions}
           />
         </div>
@@ -502,9 +614,9 @@
           <Input
             id="new-social-security"
             class={inputClass}
+            inputmode="decimal"
             oninput={(event) => updateDraftField('social_security_deductions', event.currentTarget.value)}
-            step="0.001"
-            type="number"
+            type="text"
             value={draftEmployee.social_security_deductions}
           />
         </div>
@@ -593,7 +705,10 @@
                   {:else}
                     <Input
                       class={cellInputClass}
+                      inputmode={getCellInputMode(employeeFieldKeys[colIndex], rowIndex - 3)}
+                      maxlength={getCellMaxLength(employeeFieldKeys[colIndex])}
                       oninput={(event) => handlePreviewCellInput(rowIndex - 3, employeeFieldKeys[colIndex], event)}
+                      pattern={getCellPattern(employeeFieldKeys[colIndex], rowIndex - 3)}
                       value={employees[rowIndex - 3]?.[employeeFieldKeys[colIndex]] ?? ''}
                     />
                   {/if}

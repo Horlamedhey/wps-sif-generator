@@ -81,6 +81,15 @@
     return value.replace(/\D/g, '');
   }
 
+  function lettersNoDigits(value) {
+    return value.replace(/\d/g, '');
+  }
+
+  function limitedDigits(value, maxLen) {
+    const digits = digitsOnly(value);
+    return typeof maxLen === 'number' ? digits.slice(0, maxLen) : digits;
+  }
+
   function parseDateSafe(value) {
     if (!value) {
       return undefined;
@@ -93,8 +102,22 @@
     }
   }
 
-  function handleDigitInput(field, event) {
-    updateField(field, digitsOnly(event.currentTarget.value));
+  function handleDigitInput(field, event, maxLen) {
+    updateField(field, limitedDigits(event.currentTarget.value, maxLen));
+  }
+
+  function handlePaymentTypeInput(event) {
+    updateField('paymentType', lettersNoDigits(event.currentTarget.value).slice(0, 32));
+  }
+
+  function handleSalaryYearInput(event) {
+    const digits = limitedDigits(event.currentTarget.value, 4);
+    updateField('salaryYear', digits === '' ? '' : Number(digits));
+  }
+
+  function handleSequenceInput(event) {
+    const digits = limitedDigits(event.currentTarget.value, 3);
+    updateField('seq', digits === '' ? '' : Number(digits));
   }
 
   function handleMonthChange(value) {
@@ -139,7 +162,7 @@
           id="employer-cr"
           class={inputClass}
           inputmode="numeric"
-          oninput={(event) => handleDigitInput('employerCr', event)}
+          oninput={(event) => handleDigitInput('employerCr', event, 32)}
           pattern="[0-9]*"
           type="text"
           value={form.employerCr}
@@ -162,10 +185,10 @@
           <Input
             id="payer-cr"
             class={inputClass}
-            disabled={form.sameAsEmployer}
             inputmode="numeric"
-            oninput={(event) => handleDigitInput('payerCr', event)}
+            oninput={(event) => handleDigitInput('payerCr', event, 32)}
             pattern="[0-9]*"
+            readonly={form.sameAsEmployer}
             type="text"
             value={form.payerCr}
           />
@@ -177,7 +200,10 @@
         <Input
           id="payer-account"
           class={inputClass}
-          oninput={(event) => updateField('payerAccount', event.currentTarget.value)}
+          inputmode="numeric"
+          maxlength="64"
+          oninput={(event) => handleDigitInput('payerAccount', event, 64)}
+          pattern="[0-9]*"
           type="text"
           value={form.payerAccount}
         />
@@ -217,11 +243,11 @@
         <Input
           id="salary-year"
           class={inputClass}
-          min="2000"
-          max="2100"
-          oninput={(event) => updateField('salaryYear', Number(event.currentTarget.value))}
-          step="1"
-          type="number"
+          inputmode="numeric"
+          maxlength="4"
+          oninput={handleSalaryYearInput}
+          pattern="[0-9]*"
+          type="text"
           value={form.salaryYear}
         />
       </div>
@@ -249,7 +275,7 @@
         <Input
           id="payment-type"
           class={inputClass}
-          oninput={(event) => updateField('paymentType', event.currentTarget.value)}
+          oninput={handlePaymentTypeInput}
           type="text"
           value={form.paymentType}
         />
@@ -283,11 +309,11 @@
         <Input
           id="sequence"
           class={inputClass}
-          min="1"
-          max="999"
-          oninput={(event) => updateField('seq', Number(event.currentTarget.value))}
-          step="1"
-          type="number"
+          inputmode="numeric"
+          maxlength="3"
+          oninput={handleSequenceInput}
+          pattern="[0-9]*"
+          type="text"
           value={form.seq}
         />
       </div>
