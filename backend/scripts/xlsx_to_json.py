@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
-"""Convert Omani Banks List.xlsx to omani_banks.json."""
+"""Convert backend/data/source/Omani Banks List.xlsx to backend/data/omani_banks.json."""
 
 import json
 from pathlib import Path
 
 import pandas as pd
 
-PROJECT_ROOT = Path(__file__).resolve().parent.parent
-XLSX_PATH = PROJECT_ROOT / "Omani Banks List.xlsx"
-JSON_PATH = PROJECT_ROOT / "omani_banks.json"
+BACKEND_ROOT = Path(__file__).resolve().parent.parent
+XLSX_PATH = BACKEND_ROOT / "data" / "source" / "Omani Banks List.xlsx"
+JSON_PATH = BACKEND_ROOT / "data" / "omani_banks.json"
 
 
 def main() -> None:

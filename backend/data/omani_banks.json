@@ -138,5 +138,10 @@
     "short_name": "OIBB",
     "bic": "OIBBOMRX",
     "bank_name": "Oman Investment Bank"
+  },
+  {
+    "short_name": "HBL",
+    "bic": "HABBOMRX",
+    "bank_name": "Habib Bank Limited"
   }
 ]

@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.pyc
+backend/.venv/
+
+# Node
+frontend/node_modules/
+frontend/.svelte-kit/
+frontend/.vercel/
+
+# Env files
+.env
+.env.*
+!.env.example
+
+# Build outputs
+frontend/build/
+frontend/.vite/
